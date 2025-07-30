@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 
 class Cargo(models.Model):
@@ -8,13 +7,13 @@ class Cargo(models.Model):
     nivel = models.IntegerField()
 
     def __str__(self):
-        return str(self.time)
+        return str(self.nome)
 
 class Usuario(models.Model):
     idcargo = models.ForeignKey(Cargo, on_delete=models.PROTECT)
     nome = models.CharField(max_length=100)
-    idade = models.IntegerField(validators=[MinValueValidator(16), MaxValueValidator(60)])
-    genero = models.CharField(max_length=1, choices=[('M', 'Masculino'), ('F', 'Feminio'), ('O', 'Outros')])
+    data_nascimento = models.DateField(null=True, blank=True)
+    genero = models.CharField(max_length=1, choices=[('M', 'Masculino'), ('F', 'Feminino'), ('O', 'Outros')])
     email = models.EmailField()
     senha = models.CharField(max_length=100)
 
@@ -26,25 +25,21 @@ class Servico(models.Model):
     ponto = models.IntegerField()
 
     def __str__(self):
-        return str(self.tipo)
+        return self.get_tipo_display()
 
 class Criticidade(models.Model):
     tipo = models.CharField(choices=[('1', 'baixa'), ('2', 'normal'), ('3', 'grave'), ('4', 'critica')])
     ponto = models.IntegerField()
 
     def __str__(self):
-        return str(self.tipo)
+        return self.get_tipo_display()
     
 class Complexidade(models.Model):
     tipo = models.CharField(choices=[('1', 'C1'), ('2', 'C2'), ('3', 'C3')])
     ponto = models.IntegerField()
 
     def __str__(self):
-        return str(self.tipo)
-
-class Classe(models.Model):
-    tipo = models.CharField(max_length=50)
-    ponto = models.IntegerField()
+        return self.get_tipo_display()
 
     def __str__(self):
         return str(self.tipo)
@@ -54,7 +49,7 @@ class Tarefa(models.Model):
     idservico = models.ForeignKey(Servico, on_delete=models.PROTECT)
     idcriticidade = models.ForeignKey(Criticidade, on_delete=models.PROTECT)
     idcomplexidade = models.ForeignKey(Complexidade, on_delete=models.PROTECT)
-    idclasse = models.ForeignKey(Classe, on_delete=models.PROTECT)
+    classe = models.CharField(max_length=100, null=True, blank=True)
     tempo_estimado = models.FloatField()
     tempo_gasto = models.FloatField()
     dt_inclusao = models.DateTimeField(default=timezone.now()) 
@@ -62,7 +57,7 @@ class Tarefa(models.Model):
     dt_encerramento = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return str(self.nome)[:20] + '...' #VERIFICAR NA VIDEO AULA O PQ DO ERRO
+        return str(self.nome)[:20] + '...'
 
 class Historico(models.Model):
     idtarefa = models.ForeignKey(Tarefa, on_delete=models.PROTECT)
