@@ -1,0 +1,16 @@
+{% extends 'games/base.html'%}
+
+{% block content %}
+    <p>Tarefas:</p>
+
+    <ul>
+        {% for t in tarefas %}
+            <li>
+                <a href="{% url 'tarefa' t.id %}">{{ t.nome }}</a>
+            </li>
+        {% empty %}
+            <li> Não há tarefas em sua fila</li>
+        {% endfor %}
+    </ul>
+
+{% endblock content%}

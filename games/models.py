@@ -15,7 +15,7 @@ class Usuario(models.Model):
     data_nascimento = models.DateField(null=True, blank=True)
     genero = models.CharField(max_length=1, choices=[('M', 'Masculino'), ('F', 'Feminino'), ('O', 'Outros')])
     email = models.EmailField()
-    senha = models.CharField(max_length=100)
+    senha = models.CharField(max_length=100) #remover
 
     def __str__(self):
         return str(self.nome)
@@ -49,9 +49,9 @@ class Tarefa(models.Model):
     idservico = models.ForeignKey(Servico, on_delete=models.PROTECT)
     idcriticidade = models.ForeignKey(Criticidade, on_delete=models.PROTECT)
     idcomplexidade = models.ForeignKey(Complexidade, on_delete=models.PROTECT)
-    classe = models.CharField(max_length=100, null=True, blank=True)
-    tempo_estimado = models.FloatField()
-    tempo_gasto = models.FloatField()
+    classe = models.CharField(max_length=100, null=True, blank=True) #deixar classe como charfield
+    tempo_estimado = models.FloatField() #tempo em horas?
+    tempo_gasto = models.FloatField() #pode ser nulo
     dt_inclusao = models.DateTimeField(default=timezone.now()) 
     dt_entrega = models.DateTimeField(null=True, blank=True)
     dt_encerramento = models.DateTimeField(null=True, blank=True)
@@ -65,6 +65,8 @@ class Historico(models.Model):
     dt_inclusao = models.DateTimeField(auto_now_add=True) 
     finalizada = models.BooleanField()
     pontos = models.IntegerField(null=True, blank= True, default=None)
+
+    #Adiocionar um retorno
 
 class Recompensa(models.Model):
     nome = models.CharField(max_length=100)
